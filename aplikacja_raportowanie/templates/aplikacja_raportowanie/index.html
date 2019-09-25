@@ -61,23 +61,13 @@
          </li>
        </ol>
        <!-- DataTables Example -->
-       <div class="card shadow mb-4 backgroud-dark">
-           <div class="card-header py-3 backgroud-dark">
-             <h6 class="m-0 font-weight-bold text-primary">{{list_of_posts_type}}</h6>
-           </div>
-           <div class="card-body">
 
-             <div class="card-body">
-               <div class="d-flex mb-3 ">
-                    <div class="ml-auto p-2">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ChoseQuaterFilter" data-whatever="chose-filter" rel-data-toggle="tooltip" data-placement="bottom"
-              title="Filtr"><i class="fas fa-filter"></i></button>
-                <a href="{% url 'raportowanie:post_new' %}" class="top-menu"><span class="btn btn-success type="button" rel-data-toggle="tooltip" data-placement="bottom"
-            title="Dodaj zgłoszenie"><i class="fas fa-plus" ></i></span></a>
-            </div>
-            </div>
+           <div class="card shadow mb-4 backgroud-dark ">
+
+
 
             {% if posts_to_do %}
+
             <h4 align="center">Zgłoszenia do podjęcia</h4>
             <table class='table table-bordered table-condensed table-striped table-hover' id="dtBasicExample"  width="100%" cellspacing="0">
             <thead>
@@ -118,6 +108,18 @@
           </table>
 
           {% endif %}
+        </div>
+
+                <div class="card py-2  backgroud-dark ">
+               <div class="d-flex mb-3 ">
+                    <div class="ml-auto p-2">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ChoseQuaterFilter" data-whatever="chose-filter" rel-data-toggle="tooltip" data-placement="bottom"
+              title="Filtr"><i class="fas fa-filter"></i></button>
+                <a href="{% url 'raportowanie:post_new' %}" class="top-menu"><span class="btn btn-success type="button" rel-data-toggle="tooltip" data-placement="bottom"
+            title="Dodaj zgłoszenie"><i class="fas fa-plus" ></i></span></a>
+            </div>
+            </div>
+
           <h4 align="center">{{list_of_posts_type}}</h4>
                 <table class='table table-bordered table-condensed table-striped table-hover' id="dtBasicExampleB"  width="100%" cellspacing="0">
                 <thead>
@@ -335,11 +337,11 @@
               Opcje sortowania
               <div>
                 <label for="recipient-name" class="col-form-label">data od:</label>
-                <input type="date" id="start-date" name="pic-a-date-start-" value="{{today}}" onclick="ResetQuater()" >
+                <input type="date" id="start-date" name="pic-a-date-start-" value="{{today}}" onchange="ResetQuater()" >
               </div>
               <div>
                 <label for="recipient-name" class="col-form-label">data do:</label>
-                <input type="date" id="stop-date" name="pic-a-date-stop-" value="{{today}}" onclick="ResetQuater()">
+                <input type="date" id="stop-date" name="pic-a-date-stop-" value="{{today}}" onchange="ResetQuater()">
               </div>
 
             </div>
