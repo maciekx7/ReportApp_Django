@@ -1,0 +1,118 @@
+{% extends 'aplikacja_raportowanie/base_layout.html' %}
+
+{% block navbar_raportowanie_zdarzen %}
+<a class="navbar-brand mr-1" data-toggle="modal" data-target="#goBackToUsersPageModal" href="#" >Raportowanie zdarzeń</a>
+{% endblock %}
+
+{% block content %}
+
+  <div id="wrapper">
+
+    <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion margin-top100" id="accordionSidebar">
+    </ul>
+
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion fixed-top margin-top100" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+       <div class="sidebar-brand-icon rotate-n-15">
+         <i class="fas fa-laugh-wink"></i>
+       </div>
+       <div class="sidebar-brand-text mx-3">Cześć! <sup></sup></div>
+     </a>
+     <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Menu
+      </div>
+
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-list"></i>
+          <span>Listy</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Wybór listy zdarzeń</h6>
+            <a class="collapse-item" href="#" data-toggle="modal" data-target="#goBackToUsersPageModal">Twoja lista zdarzeń</a>
+            <a class="collapse-item" href="#" data-toggle="modal" data-target="#goBackToGroupPageModal">Lista zdarzeń grupy</a>
+            <a class="collapse-item" href="#" data-toggle="modal" data-target="#goBackToClosedPostsModal">Zamknięte</a>
+            <a class="collapse-item" href="#" data-toggle="modal" data-target="#goBackToClosedUsersPostsModal">Twoje zamknięte</a>
+            <a class="collapse-item" href="{% url 'raportowanie:long_terms' %}">Zgłoszenia dlugoterminowe</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'raportowanie:post_new' %}">
+          <i class="fas fa-fw fa-plus"></i>
+          <span>NOWE zgłoszenie</span></a>
+      </li>
+    </ul>
+
+    <div id="content-wrapper">
+      <div class="margin-top50 margin-left backgroud-dark">
+
+      <div class="container-fluid">
+
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          {% block hyperlink_type %}
+        <li class="breadcrumb-item">
+            <a href="#" data-toggle="modal" data-target="#goBackToUsersPageModal" >Lista zdarzeń</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a>{{view_type}}</a><!-- TU WPISUJEMY ADRES STRONY STARTOWEJ -->
+          </li>
+          {% endblock %}
+        </ol>
+
+        <!--  CONTENT -->
+        {% block post_new_form %}
+        {% endblock%}
+
+      </div>
+      <!-- /.container-fluid -->
+
+    </div>
+    <!-- /.content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+  </div>
+
+  <!-- Canell Modal -->
+  <div class="modal fade" id="CancellModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      {% block go_back_to_post %}<form method="post" action=" {{request.META.HTTP_REFERER}} ">{% endblock %}
+          {% csrf_token %}
+          <div class="modal-dialog" role="document">
+              <div class="modal-content backgroud-dark">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">ANULOWANIE - Jesteś pewien?</h5>
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">Jesteś pewien swojego działania?</div>
+                  <div class="modal-footer">
+                      <button class="btn btn-dark" type="button" data-dismiss="modal" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Anuluj"><i class="fas fa-ban"></i></button>
+                      <button class="btn btn-primary" type="submit" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Potwierdź"><i class="fas fa-check"></i></button>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+
+
+
+
+
+{% endblock content %}

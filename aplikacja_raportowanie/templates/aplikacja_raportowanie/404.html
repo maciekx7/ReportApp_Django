@@ -1,0 +1,60 @@
+{% extends 'aplikacja_raportowanie/base_layout.html' %}
+
+{% block content %}
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+      <!-- Sidebar - Brand -->
+     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+       <div class="sidebar-brand-icon rotate-n-15">
+         <i class="fas fa-laugh-wink"></i>
+       </div>
+       <div class="sidebar-brand-text mx-3">Cześć!</div>
+     </a>
+     <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Menu
+      </div>
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-list"></i>
+          <span>Listy</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Wybór listy zdarzeń</h6>
+            <a class="collapse-item" href="{% url 'raportowanie:users_index' %}">Twoja lista zdarzeń</a>
+            <a class="collapse-item" href="{% url 'raportowanie:index' %}">Lista zdarzeń grupy</a>
+            <a class="collapse-item" href="{% url 'raportowanie:index_closed' %}">Zamknięte</a>
+            <a class="collapse-item" href="{% url 'raportowanie:users_index_closed' %}">Twoje zamknięte</a>
+          </div>
+        </div>
+      </li>
+
+<li class="nav-item">
+        <a class="nav-link" href="{% url 'raportowanie:post_new' %}">
+          <i class="fas fa-fw fa-plus"></i>
+          <span>NOWE zgłoszenie</span></a>
+      </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+	<h1 align = "center">
+       404 PAGE NOT FOUND
+	 </h1>
+	<h2 align = "center"> Chyba się zgubiłeś...</h2>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-wrapper -->
+
+  </div>
+  </div>
+  <!-- /#wrapper -->
+{% endblock %}

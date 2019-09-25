@@ -1,0 +1,126 @@
+{% extends 'aplikacja_raportowanie/base_filled_page.html' %}
+
+{% block post_filled %}
+<!-- Page Content -->
+    <form method="post">
+     {% csrf_token %}
+            <div class="d-flex mb-3 ">
+                 <div class="ml-auto p-2">
+                   <a type="button" class="btn btn-dark"  href="{% url 'raportowanie:post_edit' post_id=post.id %}" rel-data-toggle="tooltip" data-placement="bottom"
+						title="Edycja"><i class="fas fa-edit"></i>
+                         <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ChangeAuthorWithACommantModal" data-whatever="author-change" rel-data-toggle="tooltip" data-placement="bottom"
+						title="Zmień właściciela"><i class="fas fa-users"></i></button>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    <a type="button" class="btn btn-warning"  href="{% url 'raportowanie:post_history' post_id=post.id %}" rel-data-toggle="tooltip" data-placement="bottom"
+						title="Historia"><i class="fas fa-history"></i>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    <a type="button" class="btn btn-danger" data-toggle="modal" data-target="#DeletePostModal" data-whatever="delete-change" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Usun"><i class="fas fa-trash"></i></a>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="p-2 ">
+                <h6>Tytuł</h6>
+                <h1>{{post.title}}</h1>
+            </div>
+            <h6>Treść zgłoszenia:</h6>
+            <h4 class="post-text">{{post.text}}</h4><br>
+            <style>
+              .post-text{
+                color: green
+              }
+              </style>
+              <div class="d-flex bd-highlight mb-3">
+                <div class="p-2 bd-highlight">
+                  <h6>Właściciel</h6>
+                  <h5>{{post.get_author}}</h5></div>
+                <div class="p-2 bd-highlight">
+                  <h6>Data startu problemu:</h6>
+                  <h5>{{post.start_date | date:"Y-m-d H:i"}}</h5></div>
+                <div class="p-2 bd-highlight">
+                  <h6>Data publikacji:</h6>
+                  <h5 align="right">{{post.publish_date | date:"Y-m-d H:i"}}</h5></div>
+              <div class="p-2 bd-highlight">
+                <h6>Status:</h6>
+                <h5 class="status-info-color">{{post.status}}</h5></div>
+              <div class="p-2 bd-highlight">
+                <h6>QM id</h6>
+                <h5><span class="{{post.get_QM_id_icon}}"></span> {{post.get_Qm_id}}</h5></div>
+              <div class="p-2 bd-highlight">
+                <h6>TW/SWING ticket</h6>
+                <h5><span class="{{post.get_ticket_number_icon}}"></span> {{ post.get_ticket_number }}</h5></div>
+
+              <div class="p-2 bd-highlight">
+                <h6>Zalącznik:</h6>
+                <a href="{{ post.get_absolute_file_url }}"><span class="{{post.if_post_have_file_icon}}" rel-data-toggle="tooltip" data-placement="bottom"
+        title="{{post.file.name}}" > {{ post.if_there_is_a_file_return_text }}</a></div>
+              </div>
+
+    </form>
+<div class="d-flex mb-3">
+    <div class="p-2 ">
+
+
+      </div>
+  </div>
+
+
+<!-- COMMENT BOX -->
+<div class="row bootstrap snippets">
+    <!-- <div class="col-md-6 col-md-offset-2 col-sm-12"> -->
+    <div class="col-md-10 col-md-offset-2 col-sm-12">
+        <div class="comment-wrapper">
+            <h5>
+                Skomentuj problem
+            </h5>
+                <form method="POST" class="comment-form" enctype="multipart/form-data">
+                     {% csrf_token %}
+                    <div>
+                        {{ form.as_p }}
+                    </div>
+                    <div align="center">
+                        <button class="btn btn-primary" type="submit" rel-data-toggle="tooltip" data-placement="bottom"
+							title="Zatwierdź">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </form>
+                    <hr>
+            <ul class="media-list">
+                {% for comment in comments %}
+                <li class="media">
+                    <a href="#" class="pull-left">
+                        <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
+                    </a>
+                    <div class="media-body">
+                        <span class="text-muted pull-right">
+                            <small class="text-muted">{{comment.publish_date}}</small>
+                        </span>
+                            <strong class="text-success">@{{comment.author}}</strong>
+                            <p>
+                                {{comment.text}}
+                             </p>
+                            <div><small class="text-muted">akcja:</small></div>
+                            <div><font color="green">{{comment.status}}</font></div>
+                            <a href="{{ comment.get_absolute_file_url }}"><span class="{{comment.if_comment_have_file_icon}}" rel-data-toggle="tooltip" data-placement="bottom"
+        						                title="{{comment.file.name}}"> {{comment.if_there_is_a_file_return_text }}</a>
+                            </div>
+                    <a type="button" class="btn btn-dark"  href="{% url 'raportowanie:comment_edit' post.id comment.id %}" rel-data-toggle="tooltip" data-placement="bottom"
+						title="Edycja"><i class="fas fa-edit"></i></a>
+                    <a type="button" class="btn btn-warning"  href="{% url 'raportowanie:comment_history' post.id comment.id %}" rel-data-toggle="tooltip" data-placement="bottom"
+						title="Historia"><i class="fas fa-history"></i></a>
+                  <form method="post" action="{% url 'raportowanie:comment_delete' post.id  comment.id %}" onsubmit="return confirm('Czy napewno chcesz usunąć ten komentarz? Jest to operacja nieodwracalna!');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" rel-data-toggle="tooltip" data-placement="bottom"
+						title="Usuń"><i class="fas fa-trash" ></i></button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

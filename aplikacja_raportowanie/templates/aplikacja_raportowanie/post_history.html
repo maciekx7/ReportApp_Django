@@ -1,0 +1,38 @@
+{% extends 'aplikacja_raportowanie/base_filled_page.html' %}
+
+{% block post_filled %}
+<a href="{% url 'raportowanie:post_filled' post.id %}" type="button" class="btn btn-dark"><i class="fas fa-chevron-left"></i></a>
+<table class='table table-bordered table-condensed table-striped table-hover' width="100%" cellspacing="0">
+  <thead>
+    <tr>
+      <th >Tytuł</th>
+      <th>Właściciel</th>
+      <th>Treść</th>
+      <th>Data startu</th>
+      <th>id z QM</th>
+      <th>Modyfikujący</th>
+      <th>Data modyfikacji</th>
+      <th>Status</th>
+      <th>Załącznik</th>
+      <th>Zmiana</th>
+    </tr>
+  </thead>
+  {% for post in post_history %}
+  <tbody id="myTable">
+    <tr>
+      <td>{{ post.title}}</td>
+      <td>{{ post.author}}</td>
+      <th>{{ post.text}}</th>
+      <td>{{ post.start_date | date:"Y-m-d H:i"}}</td>
+      <th>{{ post.QM_id }}</th>
+      <td>{{ post.history_user}}</td>
+      <td>{{ post.history_date}}</td> <!--  można dodać  | date:"Y-m-d H:i" by mieć format liczbowy-->
+      <td>{{ post.status}}</td>
+      <td> {{ post.file }}</td>
+      <td>{{ post.change}}</td>
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
+
+{% endblock %}

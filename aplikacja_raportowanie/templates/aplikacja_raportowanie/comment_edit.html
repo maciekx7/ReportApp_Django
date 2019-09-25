@@ -1,0 +1,34 @@
+{% extends 'aplikacja_raportowanie/base_new_page.html' %}
+
+{% block hyperlink_type %}
+<li class="breadcrumb-item">
+  <a href="{% url 'raportowanie:index' %}">Lista zdarzeń</a>
+</li>
+<li class="breadcrumb-item">
+  <a href="{% url 'raportowanie:post_filled' post.id %}">Zgloszenie nr. {{post.id}}</a>
+</li>
+<li class="breadcrumb-item">
+  <a>Edycja komentarza</a>
+</li>
+{% endblock %}
+
+
+{% block post_new_form %}
+<!-- Page Content -->
+<h1>Edycja komentarza</h1>
+<hr>
+<form method="POST" class="post-form" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#CancellModal" data-whatever="cancell-change" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Anuluj"><i class="fas fa-ban"></i></button>
+    <button class="btn btn-primary" type="submit" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Potwierdź"><i class="fas fa-check"></i></button>
+</form>
+
+
+
+{% endblock %}}
+
+
+{% block go_back_to_post %} <form method="post" action=" {% url 'raportowanie:post_filled' post.id %} "> {% endblock %}

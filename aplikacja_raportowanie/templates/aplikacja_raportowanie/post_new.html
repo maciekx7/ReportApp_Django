@@ -1,0 +1,18 @@
+{% extends 'aplikacja_raportowanie/base_new_page.html' %}
+
+{% block post_new_form %}
+<!-- Page Content -->
+<h1>{{name_of_form}}</h1>
+<hr>
+<form method="POST" class="post-form" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <label align="left">Data startu problemu*:</label>
+    <input type="date" name="post-start-date"  value="{{date}}"required >
+    <input type="time" name="post-start-time" value="{{time}}" required>
+    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#CancellModal" data-whatever="cancell-change" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Anuluj"><i class="fas fa-ban"></i></button>
+    <button class="btn btn-primary" type="submit" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Potwierdź"><i class="fas fa-check"></i></button>
+  </form>
+{% endblock %}

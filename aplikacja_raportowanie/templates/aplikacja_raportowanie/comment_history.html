@@ -1,0 +1,29 @@
+{% extends 'aplikacja_raportowanie/base_filled_page.html' %}
+
+{% block post_filled %}
+<a href="{% url 'raportowanie:post_filled' post.id %}" type="button" class="btn btn-dark"><i class="fas fa-chevron-left"></i></a>
+<table class='table table-bordered table-condensed table-striped table-hover' width="100%" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Właściciel</th>
+      <th>Wpisujący</th>
+      <th>Treść</th>
+      <th>Status zgloszenia</th>
+      <th>Data modyfikacji</th>
+
+    </tr>
+  </thead>
+  {% for comment in comment_history %}
+  <tbody id="myTable">
+    <tr>
+      <td>{{ comment.author}}</td>
+      <td>{{ comment.history_user}}</td>
+      <th>{{ comment.text}}</th>
+      <td>{{ comment.status}}</td>
+      <td>{{ comment.history_date }}</td> <!--  można dodać  | date:"Y-m-d H:i" by mieć format liczbowy-->
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends 'aplikacja_raportowanie/base_layout.html' %}
+
+{% block content %}
+
+
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion margin-top100" id="accordionSidebar">
+
+    </ul>
+
+
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion fixed-top margin-top100" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+       <div class="sidebar-brand-icon rotate-n-15">
+         <i class="fas fa-laugh-wink"></i>
+       </div>
+       <div class="sidebar-brand-text mx-3">Cześć! <sup></sup></div>
+     </a>
+     <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Menu
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-list"></i>
+          <span>Listy</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Wybór listy zdarzeń</h6>
+            <a class="collapse-item" href="{% url 'raportowanie:users_index' %}">Twoja lista zdarzeń</a>
+            <a class="collapse-item" href="{% url 'raportowanie:index' %}">Lista zdarzeń grupy</a>
+            <a class="collapse-item" href="{% url 'raportowanie:index_closed' %}">Zamknięte</a>
+            <a class="collapse-item" href="{% url 'raportowanie:users_index_closed' %}">Twoje zamknięte</a>
+            <a class="collapse-item" href="{% url 'raportowanie:long_terms' %}">Zgłoszenia dlugoterminowe</a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'raportowanie:post_new' %}">
+          <i class="fas fa-fw fa-plus"></i>
+          <span>NOWE zgłoszenie</span></a>
+      </li>
+    </ul>
+
+    <div id="content-wrapper" class = "margin-auto">
+      <div class="margin-left margin-top50 backgroud-dark">
+
+      <div class="container-fluid">
+
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'raportowanie:index' %}">Lista zdarzeń</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a>Zgloszenie nr. {{post.id}}</a><!-- TU WPISUJEMY ADRES STRONY STARTOWEJ -->
+          </li>
+        </ol>
+
+
+
+        <!--  CONTENT -->
+        {% block post_filled %}
+        {% endblock %}
+        </div>
+
+
+        <!-- ModalToEditAuthorInPostWithACommant -->
+        <div class="modal fade" id="ChangeAuthorWithACommantModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content backgroud-dark">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Zmiana właściciela</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action = "{% url 'raportowanie:author_post_change' post_id=post.id %}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Nowy właściciel:</label>
+                    <select value={{post.author}} name="new-author-of-post">
+                      {% for author in users %}
+                        <option value="{{author}}">{{author}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Komentarz:</label>
+                    <textarea class="form-control" name="comment-text-after-author-edit" required></textarea>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Anuluj"><i class="fas fa-ban"></i></button>
+                <button type="submit" class="btn btn-primary" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Potwierdź"><i class="fas fa-check"></i></button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+<script>
+  $('#ChangeAuthorWithACommantModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget)
+  var recipient = button.data('whatever')
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+});
+</script>
+
+
+
+<!-- DeletePost modal -->
+<div class="modal fade" id="DeletePostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <form method="post" action="{% url 'raportowanie:post_delete' post_id=post.id %}">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content backgroud-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">USUWANIE - Jesteś pewien?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">USUWASZ zdarzenie! Jest to operacja nieodwracalna (chyba że zapłacisz 5 dych adminowi)! Jesteś pewien swojego działania?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-dark" type="button" data-dismiss="modal" rel-data-toggle="tooltip" data-placement="bottom"
+					title="Anuluj"><i class="fas fa-ban"></i></button>
+                    <button class="btn btn-danger" type="submit" rel-data-toggle="tooltip" data-placement="bottom"
+					title="USUŃ"><i class="fas fa-trash" ></i></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- DeletePost modal -->
+<script>
+  $(".confirm").confirm();
+</script>
+
+
+        <!-- /.container-fluid -->
+      </div>
+      <!-- /.content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+  </div>
+
+{% endblock %}

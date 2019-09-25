@@ -1,0 +1,388 @@
+{% extends 'aplikacja_raportowanie/base_layout.html' %}
+
+{% block content %}
+
+<div id="wrapper" class="backgroud-dark">
+  <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion margin-top100" id="accordionSidebar">
+  </ul>
+
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion fixed-top margin-top100" id="accordionSidebar">
+  <!-- Sidebar - Brand -->
+ <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+   <div class="sidebar-brand-icon rotate-n-15">
+     <i class="fas fa-laugh-wink"></i>
+   </div>
+   <div class="sidebar-brand-text mx-3">Cześć!</div>
+ </a>
+ <!-- Divider -->
+  <hr class="sidebar-divider my-0">
+  <!-- Heading -->
+  <div class="sidebar-heading">
+    Menu
+  </div>
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+      <i class="fas fa-list"></i>
+      <span>Listy</span>
+    </a>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Wybór listy zdarzeń</h6>
+        <a class="collapse-item" href="{% url 'raportowanie:users_index' %}">Twoja lista zdarzeń</a>
+        <a class="collapse-item" href="{% url 'raportowanie:index' %}">Lista zdarzeń grupy</a>
+        <a class="collapse-item" href="{% url 'raportowanie:index_closed' %}">Zamknięte</a>
+        <a class="collapse-item" href="{% url 'raportowanie:users_index_closed' %}">Twoje zamknięte</a>
+        <a class="collapse-item" href="{% url 'raportowanie:long_terms' %}">Zgłoszenia dlugoterminowe</a>
+      </div>
+    </div>
+  </li>
+  <li class="nav-item">
+       <a class="nav-link" href="{% url 'raportowanie:post_new' %}">
+         <i class="fas fa-fw fa-plus"></i>
+         <span>NOWE zgłoszenie</span></a>
+     </li>
+   </ul>
+
+
+
+
+
+   <div id="content-wrapper" >
+     <div class="margin-left margin-top50 ">
+
+     <div class="container-fluid">
+
+       <!-- Breadcrumbs-->
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item">
+           <a href="#">Lista zdarzeń</a>
+         </li>
+       </ol>
+       <!-- DataTables Example -->
+       <div class="card shadow mb-4 backgroud-dark">
+           <div class="card-header py-3 backgroud-dark">
+             <h6 class="m-0 font-weight-bold text-primary">{{list_of_posts_type}}</h6>
+           </div>
+           <div class="card-body">
+
+             <div class="card-body">
+               <div class="d-flex mb-3 ">
+                    <div class="ml-auto p-2">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ChoseQuaterFilter" data-whatever="chose-filter" rel-data-toggle="tooltip" data-placement="bottom"
+              title="Filtr"><i class="fas fa-filter"></i></button>
+                <a href="{% url 'raportowanie:post_new' %}" class="top-menu"><span class="btn btn-success type="button" rel-data-toggle="tooltip" data-placement="bottom"
+            title="Dodaj zgłoszenie"><i class="fas fa-plus" ></i></span></a>
+            </div>
+            </div>
+
+            {% if posts_to_do %}
+            <h4 align="center">Zgłoszenia do podjęcia</h4>
+            <table class='table table-bordered table-condensed table-striped table-hover' id="dtBasicExample"  width="100%" cellspacing="0">
+            <thead>
+              <tr align="center">
+               <th>id</th>
+                <th>Tytuł</th>
+                <th>Właściciel</th>
+                <th>Publikujący</th>
+                <th>Data startu</th>
+                <th>Data publikacji</th>
+                <th>id z QM</th>
+                <th>TW/SWING</th>
+                <th>Status</th>
+                <th>zał.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for post in posts_to_do %}
+              <tr data-href="{% url 'raportowanie:post_filled' post.id %}" align="center">
+                <td>{{post.id }}</td>
+                <td><span rel-data-toggle="tooltip" data-placement="bottom"
+              title="{{post.text}}">{{ post.title }}</span></td>
+                <td>{{ post.get_author }}</td>
+                <th>{{ post.publisher }}</th>
+                <td>{{ post.start_date | date:"Y-m-d H:i" }}</td>
+                <td><span rel-data-toggle="tooltip" data-placement="bottom"
+                  title="Data ostatniej modyfikacji: {{ post.modify_date | date:'Y-m-d H:i'}}">{{ post.publish_date  | date:"Y-m-d H:i"}}</td>
+                <th><span class="{{post.get_QM_id_icon}}" rel-data-toggle="tooltip" data-placement="bottom"
+                  title="{{post.get_Qm_id}}"></span></th>
+                <th><span class="{{post.get_ticket_number_icon}}" rel-data-toggle="tooltip" data-placement="bottom"
+                  title="{{post.get_ticket_number}}"></span></th>
+                <td>{{ post.status }}</td>
+                <th><span class="{{post.if_post_have_file_icon}}" rel-data-toggle="tooltip" data-placement="bottom"
+                  title="{{post.file.name}}"></span></th>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          {% endif %}
+          <h4 align="center">{{list_of_posts_type}}</h4>
+                <table class='table table-bordered table-condensed table-striped table-hover' id="dtBasicExampleB"  width="100%" cellspacing="0">
+                <thead>
+                  <tr align="center">
+                   <th>id</th>
+                    <th>Tytuł</th>
+                    <th>Właściciel</th>
+                    <th>Publikujący</th>
+                    <th>Data startu</th>
+                    <th>Data publikacji</th>
+                    <th>id z QM</th>
+                    <th>TW/SWING</th>
+                    <th>Status</th>
+                    <th>zał.</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                   <tr align="center">
+                   <th>id</th>
+                    <th>Tytuł</th>
+                    <th>Właściciel</th>
+                    <th>Publikujący</th>
+                    <th>Data startu</th>
+                    <th>Data publikacji</th>
+                    <th>id z QM</th>
+                    <th>TW/SWING</th>
+                    <th>Status</th>
+                    <th>zał.</th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  {% for post in posts %}
+                  <tr data-href="{% url 'raportowanie:post_filled' post.id %}" align="center">
+                    <td>{{post.id }}</td>
+                    <td><span rel-data-toggle="tooltip" data-placement="bottom"
+                  title="{{post.text}}">{{ post.title }}</span></td>
+                    <td>{{ post.get_author }}</td>
+                    <th>{{ post.publisher }}</th>
+                    <td>{{ post.start_date | date:"Y-m-d H:i" }}</td>
+                    <td><span rel-data-toggle="tooltip" data-placement="bottom"
+                      title="Data ostatniej modyfikacji: {{ post.modify_date | date:'Y-m-d H:i'}}">{{ post.publish_date  | date:"Y-m-d H:i"}}</td>
+                    <th><span class="{{post.get_QM_id_icon}}" rel-data-toggle="tooltip" data-placement="bottom"
+                      title="{{post.get_Qm_id}}"></span></th>
+                    <th><span class="{{post.get_ticket_number_icon}}" rel-data-toggle="tooltip" data-placement="bottom"
+                      title="{{post.get_ticket_number}}"></span></th>
+                    <td>{{ post.status }}</td>
+                    <th><span class="{{post.if_post_have_file_icon}}" rel-data-toggle="tooltip" data-placement="bottom"
+                      title="{{post.file.name}}"></span></th>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-wrapper -->
+
+  </div>
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- ModalToChangeQuaterFilter Modal -->
+  <div class="modal fade" id="ChoseQuaterFilter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content backgroud-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Wybór filtra</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action = "{% url 'raportowanie:quater' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              Sortowanie kwartalne/półroczne:
+              <div></div>
+              <label for="recipient-name" class="col-form-label">rok:</label>
+              <select name="year" id="year" onchange="ResetQuaterAndHalfSelect()">
+                <option value="0" selected="selected"></option>
+                  {% for year in years %}
+                  <option value="{{year}}">{{year}}</option>
+                  {% endfor %}
+                </select>
+                <label for="recipient-name" class="col-form-label">kwartał:</label>
+                <select name="quater" id="quater" onchange="QuaterDate({{years}}[{{years}}.length - 1])">
+                    <option value="0" selected="selected"></option>
+                    <option value="1">I kwartał</option>
+                    <option value="2">II kwartał</option>
+                    <option value="3">III kwartał</option>
+                    <option value="4">IV kwartał</option>
+                </select>
+                <label for="recipient-name" class="col-form-label">półrocze:</label>
+                <select name="half-a-year" id="half-a-year" onchange="HalfAYear({{years}}[{{years}}.length - 1])">
+                  <option value="0" selected="selected"></option>
+                  <option value="1">I półrocze</option>
+                  <option value="2">II półrocze</option>
+                </select>
+                <div class="modal-footer">
+                  </div>
+              <script>
+                function QuaterDate(year){
+                  var x = document.getElementById("quater").value;
+                  var y = document.getElementById("year").value;
+                  if(y == "0")
+                  {
+                    document.getElementById("year").value = year;
+                    y = document.getElementById("year").value;
+                  }
+                  var start_date = y;
+                  var stop_date = y;
+                  switch(x) {
+                    case "0":
+                      start_date = y;
+                      stop_date = y;
+                      break;
+                    case "1":
+                      start_date += "-01-01";
+                      stop_date += "-03-31";
+                      break;
+                    case "2":
+                      start_date += "-04-01";
+                      stop_date += "-06-30";
+                      break;
+                    case "3":
+                      start_date += "-07-01";
+                      stop_date += "-09-30";
+                      break;
+                    case "4":
+                      start_date = y + "-10-01";
+                      stop_date = y + "-12-31";
+                      break;
+                    }
+                    if (start_date != y && stop_date != y){
+                      document.getElementById("start-date").value = start_date;
+                      document.getElementById("stop-date").value = stop_date;
+                      document.getElementById("half-a-year").value = "0"
+                    }
+                  }
+
+                function HalfAYear(year){
+                  var x = document.getElementById("half-a-year").value;
+                  var y = document.getElementById("year").value;
+                  if(y == "0")
+                  {
+                    document.getElementById("year").value = year;
+                    y = document.getElementById("year").value;
+                  }
+                  var start_date = y;
+                  var stop_date = y;
+                  switch(x) {
+                    case "0":
+                      start_date = y;
+                      stop_date = y;
+                      break;
+                    case "1":
+                      start_date += "-01-01";
+                      stop_date += "-06-30";
+                      break;
+                    case "2":
+                      start_date += "-07-01";
+                      stop_date += "-12-31";
+                      break;
+                    }
+                    if (start_date != y && stop_date != y){
+                      document.getElementById("start-date").value = start_date;
+                      document.getElementById("stop-date").value = stop_date;
+                      document.getElementById("quater").value = "0"
+                    }
+                  }
+
+                function make_all_selected(status_list){
+                  for(var i=0; i <status_list.length; i++)
+                    {
+                      document.getElementById(status_list[i]).selected=true;
+                    }
+                }
+
+                function make_open_selected(status_list){
+                  for(var i=0; i < status_list.length - 1; i++)
+                    {
+                      document.getElementById(status_list[i]).selected=true;
+                    }
+                  document.getElementById(status_list[status_list.length-1]).selected=false;
+                }
+
+                function ResetQuater(){
+                  document.getElementById("quater").value= "";
+                  document.getElementById("half-a-year").value = "";
+                  document.getElementById("year").value = "0";
+                }
+
+                function ResetQuaterAndHalfSelect(){
+                  var half = document.getElementById("half-a-year").value;
+                  var quater = document.getElementById("quater").value;
+                  var year = document.getElementById("year").value;
+                  if(half == "0" && quater != "0")
+                  {
+                    QuaterDate(year);
+                  }
+                  else if(half != "0" && quater == "0")
+                  {
+                    HalfAYear(year);
+                  }
+                  else
+                  {
+                    document.getElementById("half-a-year").value = "0";
+                    document.getElementById("quater").value = "0";
+                  }
+                }
+              </script>
+              Opcje sortowania
+              <div>
+                <label for="recipient-name" class="col-form-label">data od:</label>
+                <input type="date" id="start-date" name="pic-a-date-start-" value="{{today}}" onclick="ResetQuater()" >
+              </div>
+              <div>
+                <label for="recipient-name" class="col-form-label">data do:</label>
+                <input type="date" id="stop-date" name="pic-a-date-stop-" value="{{today}}" onclick="ResetQuater()">
+              </div>
+
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">status:</label>
+              <select name="status-pick-a-quater" id="status-pick-a-quater" multiple>
+                  {% for statuses in statuses_list %}
+                    <option id="{{statuses}}" value="{{statuses}}" selected="selected">{{statuses}}</option>
+                  {% endfor %}
+                </select>
+                <button type="button" onclick="make_all_selected({{statuses_list}})">Wszystkie</button>
+                <button type="button" onclick="make_open_selected({{statuses_list}})">Otwarte</button>
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">kto:</label>
+              <select name="author-pick-a-quater">
+                 <option value="wszyscy">wszyscy</option>
+                 <option value="{{login_user}}" selected="selected">ja</option>
+                 {% for user_ in users_list %}
+                   <option value="{{user_}}">{{user_}}</option>
+                 {% endfor %}
+               </select>
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">co:</label>
+              <select name="what-state-pick-a-quater">
+                    <option value="jestem_wlascicielem">jest wlascicielem</option>
+                    <option value="jestem-bylem_wlascicielem">jest/był wlascicielem</option>
+                    <option value="skomentowałem">skomentował</option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fas fa-ban"></i></button>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i></button>
+            </div>
+            </form>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
