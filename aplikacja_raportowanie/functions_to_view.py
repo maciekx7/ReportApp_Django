@@ -54,28 +54,73 @@ def status_change_field(post_first_status,post_status, if_first, if_second, if_e
 
 
 #zwraca listę zdarzeń w kwartale z ustalonym filtrowaniem statusu i użytkownika
-def which_quater(request, quater, status_, author_, what_):
-    if author_ == "wszyscy":
-        return Post.objects.filter(is_deleted=False, status__in = status_, publish_date__range=(quater))
-    else:
-        if what_ == "jestem_wlascicielem":
-            return Post.objects.filter(author = User.objects.get(username=author_), status__in = status_, is_deleted = False, publish_date__range=(quater))
-        elif what_ == "jestem-bylem_wlascicielem":
-            list_of_posts = []
-            for post in Post.objects.filter(status__in = status_, is_deleted = False, publish_date__range=(quater)):
-                for post_history in post.history.all():
-                    if str(post_history.author) == str(author_):
-                        list_of_posts.append(Post.objects.get(id=post.id))
-                        break
-            return list_of_posts
-        elif what_ == "skomentowałem":
-            list_of_posts = []
-            for post in Post.objects.filter(status__in = status_, is_deleted = False, publish_date__range=(quater)):
-                for comment in Comment.objects.filter(post_id = post):
-                    if str(comment.author) == str(author_):
-                        list_of_posts.append(post)
-                        break
-            return list_of_posts
+def which_quater(request, quater, status_, author_, what_, date_type):
+    if date_type == "publish_date":
+        if author_ == "wszyscy":
+            return Post.objects.filter(is_deleted=False, status__in = status_, publish_date__range=(quater))
+        else:
+            if what_ == "jestem_wlascicielem":
+                return Post.objects.filter(author = User.objects.get(username=author_), status__in = status_, is_deleted = False, publish_date__range=(quater))
+            elif what_ == "jestem-bylem_wlascicielem":
+                list_of_posts = []
+                for post in Post.objects.filter(status__in = status_, is_deleted = False, publish_date__range=(quater)):
+                    for post_history in post.history.all():
+                        if str(post_history.author) == str(author_):
+                            list_of_posts.append(Post.objects.get(id=post.id))
+                            break
+                return list_of_posts
+            elif what_ == "skomentowałem":
+                list_of_posts = []
+                for post in Post.objects.filter(status__in = status_, is_deleted = False, publish_date__range=(quater)):
+                    for comment in Comment.objects.filter(post_id = post):
+                        if str(comment.author) == str(author_):
+                            list_of_posts.append(post)
+                            break
+                return list_of_posts
+    elif date_type == "modify_date":
+        if author_ == "wszyscy":
+            return Post.objects.filter(is_deleted=False, status__in = status_, modify_date__range=(quater))
+        else:
+            if what_ == "jestem_wlascicielem":
+                return Post.objects.filter(author = User.objects.get(username=author_), status__in = status_, is_deleted = False, modify_date__range=(quater))
+            elif what_ == "jestem-bylem_wlascicielem":
+                list_of_posts = []
+                for post in Post.objects.filter(status__in = status_, is_deleted = False, modify_date__range=(quater)):
+                    for post_history in post.history.all():
+                        if str(post_history.author) == str(author_):
+                            list_of_posts.append(Post.objects.get(id=post.id))
+                            break
+                return list_of_posts
+            elif what_ == "skomentowałem":
+                list_of_posts = []
+                for post in Post.objects.filter(status__in = status_, is_deleted = False, modify_date__range=(quater)):
+                    for comment in Comment.objects.filter(post_id = post):
+                        if str(comment.author) == str(author_):
+                            list_of_posts.append(post)
+                            break
+                return list_of_posts
+    elif date_type == "start_date":
+        if author_ == "wszyscy":
+            return Post.objects.filter(is_deleted=False, status__in = status_, start_date__range=(quater))
+        else:
+            if what_ == "jestem_wlascicielem":
+                return Post.objects.filter(author = User.objects.get(username=author_), status__in = status_, is_deleted = False, start_date__range=(quater))
+            elif what_ == "jestem-bylem_wlascicielem":
+                list_of_posts = []
+                for post in Post.objects.filter(status__in = status_, is_deleted = False, start_date__range=(quater)):
+                    for post_history in post.history.all():
+                        if str(post_history.author) == str(author_):
+                            list_of_posts.append(Post.objects.get(id=post.id))
+                            break
+                return list_of_posts
+            elif what_ == "skomentowałem":
+                list_of_posts = []
+                for post in Post.objects.filter(status__in = status_, is_deleted = False, start_date__range=(quater)):
+                    for comment in Comment.objects.filter(post_id = post):
+                        if str(comment.author) == str(author_):
+                            list_of_posts.append(post)
+                            break
+                return list_of_posts
 
 def quater_string(date):
     year = date[0][0:4]

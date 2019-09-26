@@ -45,6 +45,7 @@ class Post(models.Model):
 
     def publish(self, request, start_date, start_time, status):
         self.publish_date = timezone.now()
+        self.modify_date = timezone.now()
         self.publisher = request.user
         if status != "do podjęcia":
             self.author = request.user

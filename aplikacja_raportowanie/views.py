@@ -43,13 +43,15 @@ def index_quater(request):
 	if request.method == "POST":
 		start_date = request.POST['pic-a-date-start-']
 		stop_date = request.POST['pic-a-date-stop-']
-		date = str(start_date), str(stop_date)
+		date = str(start_date) + " 00:00", str(stop_date) + " 23:59"
 		status = request.POST.getlist('status-pick-a-quater')
 		author = str(request.POST['author-pick-a-quater'])
 		what_ = str(request.POST['what-state-pick-a-quater'])
-		posts = which_quater(request, date, status, author, what_)
+		date_type = str(request.POST['date'])
+		print(date_type)
+		posts = which_quater(request, date, status, author, what_, date_type)
 		view_type = str(quater_string(date)) + ", " + str(status_name_filter(str(status))) + ", " + author + ", " + what_.replace('-', "/", 1).replace('_', ' ')
-		index = View_type(request, posts, view_type)
+		index = View_type(request, posts,False, view_type)
 		return index.render_view(request)
 	else:
 		return redirect('raportowanie:index')
@@ -146,6 +148,7 @@ def post_filled(request, post_id):
 			else:
 				post.author = request.user
 			post.change = status_change_field(post_first_status, post.status, "Zamknięcie", "Ponowne otwarcie", "Dodanie komentarza", "Ponowne otwarcie, do podjęcia", "Podjęcie zgłoszenia")
+			post.modify_date = timezone.now()
 			post.save()
 			comment.post_id.add(str(post.id))
 	else:
@@ -272,6 +275,8 @@ def comment_edit(request, post_id, comment_id):
 			comment = form.save(commit = False)
 			comment.edit()
 			post_first_status = post.status
+			if post.status != comment.status:
+				post.modify_date = timezone.now()
 			post.status = comment.status
 			post.change = status_change_field(post_first_status, post.status, f"Edycja komentarza {comment.id}, zamknięcie", f"Edycja komentarza {comment.id}, ponowne otwarcie", f"Edycja komentarza {comment.id}", f"Edycja koentarza {comment.id}, otwarcie, do podjęcia", f'Podjęcie zgłoszenia')
 			post.save()

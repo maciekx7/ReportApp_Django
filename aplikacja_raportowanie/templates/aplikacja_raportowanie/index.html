@@ -111,6 +111,7 @@
         </div>
 
                 <div class="card py-2  backgroud-dark ">
+                  <h4 align="center">{{list_of_posts_type}}</h4>
                <div class="d-flex mb-3 ">
                     <div class="ml-auto p-2">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ChoseQuaterFilter" data-whatever="chose-filter" rel-data-toggle="tooltip" data-placement="bottom"
@@ -120,7 +121,6 @@
             </div>
             </div>
 
-          <h4 align="center">{{list_of_posts_type}}</h4>
                 <table class='table table-bordered table-condensed table-striped table-hover' id="dtBasicExampleB"  width="100%" cellspacing="0">
                 <thead>
                   <tr align="center">
@@ -221,6 +221,7 @@
                   <option value="1">I półrocze</option>
                   <option value="2">II półrocze</option>
                 </select>
+
                 <div class="modal-footer">
                   </div>
               <script>
@@ -334,28 +335,52 @@
                   }
                 }
               </script>
-              Opcje sortowania
+              <div align="center">Opcje sortowania</div>
+              <label for="recipient-name" class="col-form-label">data od:</label>
+              <div class="row justify-content-between">
+                <div class="col-4">
               <div>
-                <label for="recipient-name" class="col-form-label">data od:</label>
                 <input type="date" id="start-date" name="pic-a-date-start-" value="{{today}}" onchange="ResetQuater()" >
               </div>
               <div>
                 <label for="recipient-name" class="col-form-label">data do:</label>
                 <input type="date" id="stop-date" name="pic-a-date-stop-" value="{{today}}" onchange="ResetQuater()">
               </div>
+              </div>
+                <div class="col-4">
+                  <div>
+                    <div>
+                      <input type="radio" id="date" name="date" value="modify_date" checked="cecked">
+                      <label for="date_1">data modyfikacji</label>
+                    </div>
+                    <div>
+                      <input type="radio" id="date" name="date" value="publish_date">
+                      <label for="date_2">data publikacji</label>
+                    </div>
+                    <div>
+                      <input type="radio" id="date" name="date" value="start_date">
+                      <label for="date_3">data startu</label>
+                    </div>
+                </div>
 
+                </div>
+
+
+              </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" align="center">
               <label for="recipient-name" class="col-form-label">status:</label>
               <select name="status-pick-a-quater" id="status-pick-a-quater" multiple>
                   {% for statuses in statuses_list %}
                     <option id="{{statuses}}" value="{{statuses}}" selected="selected">{{statuses}}</option>
                   {% endfor %}
                 </select>
+                <div>
                 <button type="button" onclick="make_all_selected({{statuses_list}})">Wszystkie</button>
                 <button type="button" onclick="make_open_selected({{statuses_list}})">Otwarte</button>
             </div>
-            <div class="form-group">
+            </div>
+            <div class="form-group" align="center">
               <label for="recipient-name" class="col-form-label">kto:</label>
               <select name="author-pick-a-quater">
                  <option value="wszyscy">wszyscy</option>
@@ -365,7 +390,7 @@
                  {% endfor %}
                </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" align="center">
               <label for="recipient-name" class="col-form-label">co:</label>
               <select name="what-state-pick-a-quater">
                     <option value="jestem_wlascicielem">jest wlascicielem</option>
