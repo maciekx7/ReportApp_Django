@@ -1,0 +1,5 @@
+You need to install some python packages:
+
+-django
+-requests
+-django-simple-history
